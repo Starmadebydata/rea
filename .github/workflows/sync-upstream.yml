@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Merge upstream changes into main
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # SYNC_TOKEN: fine-grained PAT with Contents + Workflows read/write on this repo.
+          # The default GITHUB_TOKEN cannot merge upstream commits that touch .github/workflows.
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           gh api -X POST repos/${{ github.repository }}/merge-upstream -f branch=main
